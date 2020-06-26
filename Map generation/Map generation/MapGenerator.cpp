@@ -32,7 +32,7 @@ void main() {
 	Door door4;
 	door4.used = false;
 	door4.direction = EAST;
-	//FirstRoom.doors.push_back(&door4);
+	FirstRoom.doors.push_back(&door4);
 	
 	
 	//APUNTE al hacerlo en este orden las puertas no se borran
@@ -183,7 +183,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 
 bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1])
 {
-	//para hacer el tamaño aleatorio, pasar a esta funcion la direccion, y se coloca la posicion conforme lo al tamaño de esta, en vez de hacerlo en la funcion de los pasillos
+	//APUNTE para hacer el tamaño aleatorio, pasar a esta funcion la direccion, y se coloca la posicion conforme lo al tamaño de esta, en vez de hacerlo en la funcion de los pasillos
 	bool ret = true;
 	Room newRoom;
 	newRoom.x = posx;
@@ -209,34 +209,39 @@ bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1
 		break;
 	}
 	newRoom.doors.push_back(&door);
-	int newdoors = 1; // rand() % 2;
+	int newdoors = 1 + rand() % 3;
+	int type = 1 + rand() % 3;
+	//cout << newdoors;
+	//cout << type;
 	for (int i = 0; i < newdoors; i++)
 	{
-		Door door2;
-		door2.used = false;
-		door2.direction = door.direction;
+		Door* door2 = new Door;
+		door2->used = false;
+		door2->direction = door.direction;
 		
-		while (door2.direction == door.direction)
+		while (door2->direction == door.direction)
 		{
-			int type = 1 + rand() % 4;
-		
+				
 			switch (type)
 			{
 			case 1:
-				door2.direction = NORTH;
+				door2->direction = NORTH;
 				break;
 			case 2:
-				door2.direction = SOUTH;
+				door2->direction = SOUTH;
 				break;
 			case 3:
-				door2.direction = WEST;
+				door2->direction = WEST;
 				break;
 			case 4:
-				door2.direction = EAST;
+				door2->direction = EAST;
 				break;
 			}
+			type++;
+			if (type > 4)
+				type = 0;
 		}
-		newRoom.doors.push_back(&door2);
+		newRoom.doors.push_back(door2);
 	}
 	ret = FillRoom(matrix, &newRoom);
 	if(ret) // si este falla, la funcion devovlera falso y no se crea la habitacion
@@ -253,30 +258,40 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 	max_y = max_x = 0;
 
 	int printed_pos[3][3];
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			printed_pos[i][j] = 0;
+
 	//APUNTE si se quiere retocar tamaño variable esto hay que cambiarlo
 	for (int i = -room->size/2; i <= room->size/2; i++)
 	{
 		for (int j = -room->size / 2; j <= room->size / 2; j++)
 		{
 			if (room->x + i < 100 && room->x + i >= 0 && room->y + j < 100 && room->y + j >= 0 && matrix[room->x + i][room->y + j] == 0)
-			matrix[room->x + i][room->y + j] = 1;
+			{
+				matrix[room->x + i][room->y + j] = 1;
+				printed_pos[i + room->size / 2][j + room->size / 2] = 1;
+			}
+		
+
 			else {
 				room_completed = false;
-				max_y = j;
-				max_x = i;
 				break;
 			}
 		}
 		if (room_completed == false)
 			break;
 	}
+
 	if (!room_completed)
 	{
-		for (int i = -room->size / 2; i <= max_x / 2; i++)
+		for (int i = -room->size / 2; i <= room->size / 2; i++)
 		{
-			for (int j = -room->size / 2; j <= max_y; j++)
+			for (int j = -room->size / 2; j <= room->size / 2; j++)
 			{
-				if (room->x + i < 100 && room->x + i >= 0 && room->y + j < 100 && room->y + j >= 0 && (i != max_x || j != max_y))
+				if (room->x + i < 100 && room->x + i >= 0 && room->y + j < 100 && room->y + j >= 0)
+					if(printed_pos[i + room->size / 2][j + room->size / 2] == 1)
 					matrix[room->x + i][room->y + j] = 0;
 			}
 		
@@ -377,7 +392,7 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 }
 
 void Print(int(&matrix)[HEIGHT + 1][WIDTH + 1]) {
-	system("cls");
+	//system("cls");
 	for (int i = 0; i < 100; i++)
 	{
 		for (int j = 0; j < 100; j++)
