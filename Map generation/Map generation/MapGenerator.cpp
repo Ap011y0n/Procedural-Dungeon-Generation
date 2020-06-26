@@ -8,10 +8,10 @@ using namespace std;
 void main() {
 	srand(time(NULL));
 
-	int matrix[100][100];
+	int matrix[HEIGHT +1][WIDTH + 1];
 
-	for (int i = 0; i < 100; i++)
-		for (int j = 0; j < 100; j++)
+	for (int i = 0; i < HEIGHT +1; i++)
+		for (int j = 0; j < WIDTH+1; j++)
 			matrix[i][j] = 0;
 
 	Room FirstRoom;
@@ -89,7 +89,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 			case NORTH:
 				corridor.posx = posx - 1;
 				corridor.posy = posy;
-				if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
+				if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
 				{
 				matrix[corridor.posx][corridor.posy] = 2;
 				}
@@ -102,7 +102,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 			case SOUTH:
 				corridor.posx = posx + 1;
 				corridor.posy = posy;
-				if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
+				if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
 				{
 				 matrix[corridor.posx][corridor.posy] = 2;
 				}
@@ -114,7 +114,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 			case WEST:
 				corridor.posx = posx;
 				corridor.posy = posy - 1;
-				if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
+				if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
 				{
 
 					matrix[corridor.posx][corridor.posy] = 2;
@@ -128,7 +128,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 			case EAST:
 				corridor.posx = posx;
 				corridor.posy = posy + 1;
-				if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
+				if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0 && matrix[corridor.posx][corridor.posy] == 0)
 				{
 					matrix[corridor.posx][corridor.posy] = 2;
 				}
@@ -267,7 +267,7 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 	{
 		for (int j = -room->size / 2; j <= room->size / 2; j++)
 		{
-			if (room->x + i < 100 && room->x + i >= 0 && room->y + j < 100 && room->y + j >= 0 && matrix[room->x + i][room->y + j] == 0)
+			if (room->x + i < HEIGHT + 1 && room->x + i >= 0 && room->y + j < WIDTH + 1 && room->y + j >= 0 && matrix[room->x + i][room->y + j] == 0)
 			{
 				matrix[room->x + i][room->y + j] = 1;
 				printed_pos[i + room->size / 2][j + room->size / 2] = 1;
@@ -289,7 +289,7 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 		{
 			for (int j = -room->size / 2; j <= room->size / 2; j++)
 			{
-				if (room->x + i < 100 && room->x + i >= 0 && room->y + j < 100 && room->y + j >= 0)
+				if (room->x + i < HEIGHT + 1 && room->x + i >= 0 && room->y + j < WIDTH + 1 && room->y + j >= 0)
 					if(printed_pos[i + room->size / 2][j + room->size / 2] == 1)
 					matrix[room->x + i][room->y + j] = 0;
 			}
@@ -355,7 +355,7 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 		case NORTH:
 			corridor.posx = posx - 1;
 			corridor.posy = posy;
-			if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0)
+			if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0)
 			{
 				matrix[corridor.posx][corridor.posy] = 0;
 			}
@@ -363,7 +363,7 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 		case SOUTH:
 			corridor.posx = posx + 1;
 			corridor.posy = posy;
-			if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0)
+			if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0)
 			{
 				matrix[corridor.posx][corridor.posy] = 0;
 			}
@@ -371,7 +371,7 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 		case WEST:
 			corridor.posx = posx;
 			corridor.posy = posy - 1;
-			if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0)
+			if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0)
 			{
 				matrix[corridor.posx][corridor.posy] = 0;
 			}
@@ -379,7 +379,7 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 		case EAST:
 			corridor.posx = posx;
 			corridor.posy = posy + 1;
-			if (corridor.posx < 100 && corridor.posx >= 0 && corridor.posy < 100 && corridor.posy >= 0)
+			if (corridor.posx < HEIGHT + 1 && corridor.posx >= 0 && corridor.posy < WIDTH + 1 && corridor.posy >= 0)
 			{
 				matrix[corridor.posx][corridor.posy] = 0;
 			}
@@ -392,9 +392,9 @@ void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length,
 
 void Print(int(&matrix)[HEIGHT + 1][WIDTH + 1]) {
 	//system("cls");
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < HEIGHT+1; i++)
 	{
-		for (int j = 0; j < 100; j++)
+		for (int j = 0; j < WIDTH+1; j++)
 		{
 			if (matrix[i][j] != 0)
 				cout << matrix[i][j] << " ";
