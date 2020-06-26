@@ -188,7 +188,6 @@ bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1
 	Room newRoom;
 	newRoom.x = posx;
 	newRoom.y = posy;
-	newRoom.size = 3;
 	Door door;
 	door.used = true;
 	switch (direction)
