@@ -36,10 +36,13 @@ void main() {
 	
 	
 	//APUNTE al hacerlo en este orden las puertas no se borran
-	if(FillRoom(matrix, &FirstRoom));
-	CreateCorridor(matrix, &FirstRoom);
-	Print(matrix);
+	if (FillRoom(matrix, &FirstRoom))
+	{
+		CreateCorridor(matrix, &FirstRoom);
+		FillDoors(matrix, &FirstRoom);
+	}
 	
+	Print(matrix);
 
 	system("pause");
 }
@@ -209,7 +212,7 @@ bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1
 	}
 	newRoom.doors.push_back(&door);
 	int newdoors = 1 + rand() % 3;
-	int type = 1 + rand() % 3;
+	int type = rand() % 3;
 	//cout << newdoors;
 	//cout << type;
 	for (int i = 0; i < newdoors; i++)
@@ -243,9 +246,11 @@ bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1
 		newRoom.doors.push_back(door2);
 	}
 	ret = FillRoom(matrix, &newRoom);
-	if(ret) // si este falla, la funcion devovlera falso y no se crea la habitacion
+	if(ret)
+	{// si este falla, la funcion devovlera falso y no se crea la habitacion
 	CreateCorridor(matrix, &newRoom);
-	
+	FillDoors(matrix, &newRoom);
+	}
 
 	return ret;
 }
@@ -296,7 +301,13 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 		
 		}
 	}
-	else
+
+	return room_completed;
+}
+
+bool FillDoors(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
+{
+	bool ret = true;
 	for (int i = 0; i < room->doors.size(); i++)
 	{
 		switch (room->doors[i]->direction)
@@ -304,7 +315,7 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 		case NONE:
 			break;
 		case NORTH:
-			matrix[room->x - room->size/2][room->y] = 3;
+			matrix[room->x - room->size / 2][room->y] = 3;
 			break;
 		case SOUTH:
 			matrix[room->x + room->size / 2][room->y] = 3;
@@ -317,9 +328,8 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 			break;
 		}
 	}
-	return room_completed;
+	return ret;
 }
-
 void RemoveCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room, int length, Direction direction)
 {
 	int posx = room->x;

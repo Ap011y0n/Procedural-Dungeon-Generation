@@ -5,8 +5,8 @@
 #include <vector>
 #include <array>
 
-#define WIDTH 99
-#define HEIGHT 99
+#define WIDTH 100
+#define HEIGHT 100
 
 using namespace std;
 enum Direction
@@ -42,6 +42,7 @@ void main();
 bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1]);
 bool CreateCorridor(int(&array)[HEIGHT + 1][WIDTH + 1], Room*);
 bool FillRoom(int (&array)[HEIGHT+1][WIDTH+1], Room*);
+bool FillDoors(int(&array)[HEIGHT + 1][WIDTH + 1], Room*);
 void RemoveCorridor(int(&array)[HEIGHT + 1][WIDTH + 1], Room*, int, Direction);
 void Print(int(&array)[HEIGHT + 1][WIDTH + 1]);
 #endif
