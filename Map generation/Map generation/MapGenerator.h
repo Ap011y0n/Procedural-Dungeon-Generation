@@ -5,10 +5,12 @@
 #include <vector>
 #include <array>
 
-#define WIDTH 100
-#define HEIGHT 100
+#define WIDTH 30
+#define HEIGHT 30
 
 using namespace std;
+
+
 enum Direction
 {
 	
@@ -20,6 +22,13 @@ enum Direction
 	
 
 };
+
+struct point
+{
+	int x = 0;
+	int y = 0;
+};
+
 struct Door
 {
 	Direction direction = NONE;
@@ -39,7 +48,7 @@ struct Corridor
 	int posy = 0;
 };
 void main();
-bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1]);
+bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1], int size);
 bool CreateCorridor(int(&array)[HEIGHT + 1][WIDTH + 1], Room*);
 bool FillRoom(int (&array)[HEIGHT+1][WIDTH+1], Room*);
 bool FillDoors(int(&array)[HEIGHT + 1][WIDTH + 1], Room*);

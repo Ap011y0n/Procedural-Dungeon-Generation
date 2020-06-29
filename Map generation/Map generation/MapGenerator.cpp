@@ -33,7 +33,7 @@ void main() {
 	door4.used = false;
 	door4.direction = EAST;
 	FirstRoom.doors.push_back(&door4);
-	
+	FirstRoom.size = 3;
 	
 	//APUNTE al hacerlo en este orden las puertas no se borran
 	if (FillRoom(matrix, &FirstRoom))
@@ -77,7 +77,7 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 			break;
 		}
 
-		int length = 1 + rand() % 7;
+		int length = 2 + rand() % 7;
 		//cout << length;
 		bool corridor_completed = true;
 		for (int f = 0; f < length; f++)
@@ -154,24 +154,25 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 		}
 		else
 		{
+			int size = 1 + 2 * rand() % 3 + 2;
 			switch (room->doors[i]->direction)
 			{
 			case NONE:
 				break;
 			case NORTH:
-				posx -= room->size / 2 + 1;
+				posx -= size / 2 + 1;
 				break;
 			case SOUTH:
-				posx += room->size / 2 + 1;
+				posx += size / 2 + 1;
 				break;
 			case WEST:
-				posy -= room->size / 2 + 1;
+				posy -= size / 2 + 1;
 				break;
 			case EAST:
-				posy += room->size / 2 + 1;
+				posy += size / 2 + 1;
 				break;
 			}
-			if (!CreateRoom(posx, posy, room->doors[i]->direction, matrix))
+			if (!CreateRoom(posx, posy, room->doors[i]->direction, matrix, size))
 			{
 				RemoveCorridor(matrix, room, length, room->doors[i]->direction);
 				room->doors.erase(room->doors.begin() + i);
@@ -184,13 +185,14 @@ bool CreateCorridor(int(&matrix)[HEIGHT + 1][WIDTH + 1], Room* room)
 	return ret;
 }
 
-bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1])
+bool CreateRoom(int posx, int posy, Direction direction, int(&matrix)[HEIGHT + 1][WIDTH + 1], int size)
 {
 	//APUNTE para hacer el tamaño aleatorio, pasar a esta funcion la direccion, y se coloca la posicion conforme lo al tamaño de esta, en vez de hacerlo en la funcion de los pasillos
 	bool ret = true;
 	Room newRoom;
 	newRoom.x = posx;
 	newRoom.y = posy;
+	newRoom.size = size;
 	Door door;
 	door.used = true;
 	switch (direction)
@@ -261,11 +263,19 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 	int max_y, max_x;
 	max_y = max_x = 0;
 
-	int printed_pos[3][3];
+	vector<point>usedpositions;
 
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			printed_pos[i][j] = 0;
+
+
+	/*for (int i = 0; i < room->size; i++)
+		for (int j = 0; j < room->size; j++)
+		{
+			point temp;
+			temp.x = i;
+			temp.y = j;
+			usedpositions.push_back(temp);
+		}*/
+			
 
 	//APUNTE si se quiere retocar tamaño variable esto hay que cambiarlo
 	for (int i = -room->size/2; i <= room->size/2; i++)
@@ -275,10 +285,12 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 			if (room->x + i < HEIGHT + 1 && room->x + i >= 0 && room->y + j < WIDTH + 1 && room->y + j >= 0 && matrix[room->x + i][room->y + j] == 0)
 			{
 				matrix[room->x + i][room->y + j] = 1;
-				printed_pos[i + room->size / 2][j + room->size / 2] = 1;
+				point temp;
+				temp.x = room->x + i;
+				temp.y = room->y + j;
+				usedpositions.push_back(temp);
 			}
 		
-
 			else {
 				room_completed = false;
 				break;
@@ -290,7 +302,12 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 
 	if (!room_completed)
 	{
-		for (int i = -room->size / 2; i <= room->size / 2; i++)
+		for (int i = 0; i < usedpositions.size(); i++)
+		{
+			if (usedpositions[i].x < HEIGHT + 1 && usedpositions[i].x >= 0 && usedpositions[i].y < WIDTH + 1 && usedpositions[i].y >= 0)
+			matrix[usedpositions[i].x][usedpositions[i].y] = 0;
+		}
+		/*for (int i = -room->size / 2; i <= room->size / 2; i++)
 		{
 			for (int j = -room->size / 2; j <= room->size / 2; j++)
 			{
@@ -299,7 +316,7 @@ bool FillRoom(int(&matrix)[HEIGHT+1][WIDTH + 1], Room* room)
 					matrix[room->x + i][room->y + j] = 0;
 			}
 		
-		}
+		}*/
 	}
 
 	return room_completed;
